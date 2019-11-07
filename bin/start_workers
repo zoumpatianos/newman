@@ -1,0 +1,42 @@
+#!/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+This tool starts a set of mailer workers that send emails pending in the queue.
+
+./bin/start_workers
+"""
+import logging
+from threading import Thread
+from newman.config import Configuration
+from newman.broker import MailerBroker
+from newman.worker import MailerWorker
+from newman.backends.sendgrid import SendGridBackend 
+from newman.backends.mailgun import MailGunBackend 
+from newman.backends.sparkpost import SparkPostBackend
+from newman.monitoring.file_based_monitor import FileBasedMonitor
+
+__author__ = "Kostas Zoumpatianos"
+__copyright__ = "Copyright 2019"
+__license__ = "MIT"
+__version__ = "1.0.1"
+__email__ = "zoumbatianos@gmail.com"
+
+if __name__ == "__main__":
+    config = Configuration["DEFAULT"]                       # Get default configuration
+    workers = config["Workers"]
+    logging.info("Starting workers.")           
+    for i in range(workers):                                # Start a thread for each worker
+        broker = MailerBroker()                             # Each worker gets a message broker
+        backends = {}                                       # Each worker gets a set of backends 
+        monitor = FileBasedMonitor("monitoring.%d.txt" % i) # Each worker gets monitor to log events
+        if config["Backends"]["SendGrid"]["ACTIVE"]:
+            backends["SendGrid"] = SendGridBackend(config["Backends"]["SendGrid"]) 
+        if config["Backends"]["MailGun"]["ACTIVE"]:
+            backends["MailGun"] = MailGunBackend(config["Backends"]["MailGun"])
+        if config["Backends"]["SparkPost"]["ACTIVE"]:
+            backends["SparkPost"] = SparkPostBackend(config["Backends"]["SparkPost"])
+        # Start thread
+        worker = Thread(target=MailerWorker.start, args=(broker, backends, monitor)) 
+        worker.start()
+        

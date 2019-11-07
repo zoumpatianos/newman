@@ -1,0 +1,26 @@
+#!/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+This tool starts the newton mailer frontend, listening on HTTP.
+
+./bin/start_frontend
+"""
+import logging
+from newman.broker import MailerBroker
+from newman.config import Configuration
+from newman.frontends.http import HTTPFrontend
+
+__author__ = "Kostas Zoumpatianos"
+__copyright__ = "Copyright 2019"
+__license__ = "MIT"
+__version__ = "1.0.1"
+__email__ = "zoumbatianos@gmail.com"
+
+if __name__ == '__main__':
+    config = Configuration["DEFAULT"]                   # Get default configuration
+    logging.info("Starting email broker.")
+    broker = MailerBroker(**config["MessageBroker"])    # Connect to message broker
+    logging.info("Starting HTTP frontend.")
+    http_frontend = HTTPFrontend(broker)                # Listen for requests on HTTP
+    http_frontend.start(config["HttpFrontend"])         # Start listening
