@@ -1,12 +1,13 @@
 ![Newman](https://github.com/zoumpatianos/newman/raw/master/docs/img/newman.png "Newman logo")  
 # Newman mailer app
-Newman provides an HTTP service that processes email jobs.
+Newman provides an HTTP service that sends emails using multiple backends.
 Currently, it supports 3 email service backends:
 - Mailgun
 - Sendgrid
 - Sparkpost
 
-Emails are queued in a beanstalkd queue and processed by multiple workers in parallel.
+In terms of architecture, emails are queued in a beanstalkd queue server, and processed by multiple workers in parallel.
+It follows a consumer/producer pattern.
 
 ## Trivia
 - Its name is chosen in the nameshake of the [postman character in the Seinfeld TV series](https://en.wikipedia.org/wiki/Newman_(Seinfeld)).
