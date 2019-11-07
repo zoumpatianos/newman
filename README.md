@@ -127,6 +127,7 @@ The system should now be live.
 ### Monitoring 
 By default newman uses a file based monitoring module. This creates one file per thread.
 The format of each file is a semicolon separated text file.
+The columns of each file are the following: "mail service", "job id", "status"
 To monitor the files' contents as the system is running, one can issue the following command:
 
 ```bash
