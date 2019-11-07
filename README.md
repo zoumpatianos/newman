@@ -152,7 +152,7 @@ curl http://0.0.0.0:8080?from=zoumbatianos@gmail.com&\
                          subject=Testmail&\
                          body=Testbody
 ```
-The formant contains 4 get arguments:
+The format contains 4 get arguments:
 - from: the email of the sender
 - to: a target email (this can be repeated more than once for multiple recipients)
 - subject: the subject
